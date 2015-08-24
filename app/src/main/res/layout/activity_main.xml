@@ -9,8 +9,16 @@
                 tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tv"
         android:text="@string/hello_world"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+    <ImageView
+        android:id="@+id/im"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv"
+        />
 
 </RelativeLayout>

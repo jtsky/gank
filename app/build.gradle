@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'//lambda表达式插件
+apply plugin: 'jsonschema2pojo'
 
 android {
     compileSdkVersion 22
@@ -17,9 +19,38 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:support-v4:22.2.1'
     compile 'com.android.support:appcompat-v7:22.2.1'
+    //网络访问框架
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    //网络请求框架
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    //响应式编程
+    compile 'io.reactivex:rxandroid:1.0.1'
+    //注解框架
+    compile 'com.jakewharton:butterknife:7.0.1'
+    //图片加载框架
+    compile 'com.github.bumptech.glide:glide:3.6.1'
 }
