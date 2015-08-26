@@ -9,7 +9,8 @@
         <item name="colorPrimaryDark">@color/theme_primary_dark</item>
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/theme_color_accent</item>
-
+        <!--button的默认颜色-->
+        <item name="colorButtonNormal">@color/theme_primary</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

@@ -7,8 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.jin.gank.data.Constant;
 import com.jin.gank.fragment.MyFragment;
+import com.jin.gank.fragment.MyImgFragment;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private  String[] mCategoryArray = null;
     @Bind(R.id.common_toolbar)
     Toolbar mToolbar;
     @Bind(R.id.smartTabLayout)
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        mCategoryArray = getResources().getStringArray(R.array.category_list);
         if (null != mToolbar) {
             setSupportActionBar(mToolbar);
             getSupportActionBar().setHomeButtonEnabled(false);//决定左上角的图标是否可以点击
@@ -40,28 +42,16 @@ public class MainActivity extends AppCompatActivity {
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
-                .add(Constant.API_ALL, MyFragment.class)
-                .add(Constant.API_ANDROID, MyFragment.class)
-                .add(Constant.API_IOS, MyFragment.class)
-                .add(Constant.API_WELFARE, MyFragment.class)
-                .add(Constant.API_FRONT, MyFragment.class)
-                .add(Constant.API_VIDEO, MyFragment.class)
-                .add(Constant.API_RESOURCE, MyFragment.class)
+                .add(mCategoryArray[0], MyImgFragment.class)
+                .add(mCategoryArray[1], MyFragment.class)
+                .add(mCategoryArray[2], MyFragment.class)
+                .add(mCategoryArray[3], MyFragment.class)
+                .add(mCategoryArray[4], MyFragment.class)
+                .add(mCategoryArray[5], MyFragment.class)
+                .add(mCategoryArray[6], MyFragment.class)
                 .create());
         mViewpager.setAdapter(adapter);
         mSmartTabLayout.setViewPager(mViewpager);
-
-
-
-        /*RetrofitHelp.getApi().listGankCategory(Constant.API_VIDEO,10, 1)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(gank -> Observable.just(gank.getResults()))
-                .subscribe(listGank -> {
-                    mTv.setText(listGank.get(0).getType());
-                    Glide.with(MainActivity.this).load(listGank.get(0).getUrl()).into(mIm);
-                }, err -> Log.e(TAG, "err=====>" + err.toString()));*/
-
     }
 
 

@@ -15,22 +15,14 @@
     progressActivity:progressErrorStateContentTextColor="#FFFFFF"
     progressActivity:progressErrorStateTitleTextColor="#FFFFFF">
 
-
-    <!--<com.malinskiy.superrecyclerview.SuperRecyclerView
-        android:id="@+id/superRecyclerView_category"
+    <com.malinskiy.superrecyclerview.SuperRecyclerView
+        android:id="@+id/superRecyclerView_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_empty="@layout/view_empty"
         app:layout_moreProgress="@layout/view_more_progress"
         app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
         app:recyclerClipToPadding="false"
-        />-->
-
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="测试"
         />
 
 </com.vlonjatg.progressactivity.ProgressActivity>
