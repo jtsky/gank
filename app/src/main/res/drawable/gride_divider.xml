@@ -7,6 +7,6 @@
         android:startColor="#ffff0000"
         android:type="linear" />-->
     <solid android:color="@color/transparent"/>
-    <size  android:height="5dp" android:width="2dp"/>
+    <size  android:height="5dp" android:width="5dp"/>
 
 </shape>

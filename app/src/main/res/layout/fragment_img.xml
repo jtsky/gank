@@ -6,6 +6,7 @@
     android:id="@+id/progressActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     progressActivity:progressLoadingStateBackgroundColor="#FFFFFF"
     progressActivity:progressEmptyStateBackgroundColor="#fbc02d"
     progressActivity:progressEmptyStateContentTextColor="#FFFFFF"
@@ -19,10 +20,13 @@
         android:id="@+id/superRecyclerView_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/transparent"
         app:layout_empty="@layout/view_empty"
         app:layout_moreProgress="@layout/view_more_progress"
         app:mainLayoutId="@layout/layout_recyclerview_verticalscroll"
         app:recyclerClipToPadding="false"
+        android:scrollbars="none"
+        android:scrollbarStyle="outsideInset"
         />
 
 </com.vlonjatg.progressactivity.ProgressActivity>

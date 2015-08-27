@@ -6,13 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -20,8 +17,8 @@ import com.jin.gank.R;
 import com.jin.gank.animators.OvershootInLeftAnimator;
 import com.jin.gank.data.Constant;
 import com.jin.gank.data.GankCategory;
-import com.jin.gank.decoration.DividerGridItemDecoration;
 import com.jin.gank.network.RetrofitHelp;
+import com.jin.gank.view.RatioImageView;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.vlonjatg.progressactivity.ProgressActivity;
@@ -45,57 +42,81 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     SuperRecyclerView mSuperRecyclerViewImg;
 
 
-    private List<GankCategory.ResultsEntity> mResults;
+    private List<GankCategory.ResultsEntity> mGirls;
     private String[] mCategoryArray = null;
     private LayoutInflater mInflater;
     private MyAdapter mAdapter;
-    private int mScreenWidth, mScreenHeight;
-
+    private boolean isLoadMore = true;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCategoryArray = getResources().getStringArray(R.array.category_list);
         mInflater = LayoutInflater.from(getActivity());
-        //  获取Android获得屏幕的宽和高
-        DisplayMetrics dm = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-        mScreenWidth = (int) (dm.widthPixels * dm.density);
-        mScreenHeight = (int) (dm.heightPixels * dm.density);
+
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mSuperRecyclerViewImg.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        mSuperRecyclerViewImg.addItemDecoration(new DividerGridItemDecoration(getActivity()));
         mSuperRecyclerViewImg.getRecyclerView().setItemAnimator(new OvershootInLeftAnimator());
         mSuperRecyclerViewImg.setRefreshListener(this);
-        mSuperRecyclerViewImg.setRefreshingColorResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
         mSuperRecyclerViewImg.setupMoreListener(this, 10);
-
-
-        if (mResults == null || mResults.size() == 0) {
-            mProgressActivity.showLoading();
-            RetrofitHelp.getApi().listGankCategory(mCategoryArray[0], Constant.API_COUNT, -1)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .flatMap(gank -> {
-                        mResults = gank.getResults();
-                        return Observable.just(mResults);
-                    })
-                    .subscribe(listGank -> {
-                        mProgressActivity.showContent();
-                        mAdapter = new MyAdapter(mResults);
-                        mSuperRecyclerViewImg.setAdapter(mAdapter);
-                    }, err -> {
-                        Log.e(TAG, "err=====>" + err.toString());
-                        mProgressActivity.showError(null, "错误", err.toString(), "重试", null);
-                    });
+        mSuperRecyclerViewImg.setRefreshingColorResources(android.R.color.holo_orange_light, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_red_light);
+        if (mGirls == null || mGirls.size() == 0) {
+            loadGirlData(mCategoryArray[0], Constant.API_COUNT, 1, true);
         } else {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
 
+    private void loadGirlData(String category, int count, int page, boolean firstLoad) {
+        if (firstLoad) {
+            mProgressActivity.showLoading();
+            if (mGirls != null)
+                mGirls.clear();
         }
 
+        Observable.zip(RetrofitHelp.getApi().listGankCategory(category, count, page)
+                , RetrofitHelp.getApi().listGankCategory(mCategoryArray[5], count, page), (girls, videos) ->
+                        createGirlDataWithgetFreeVideoDesc(girls, videos)
+        ).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(girls -> {
+                    //判断是否已经加载到最后一页
+                    if (girls.getResults().get(girls.getResults().size() - 1).getDesc().contains("5.19"))
+                        isLoadMore = false;
 
+                    return Observable.just(girls.getResults());
+                })
+                .subscribe(girls -> {
+                            mProgressActivity.showContent();
+
+                            if (mAdapter == null) {
+                                mGirls = girls;
+                                mAdapter = new MyAdapter(mGirls);
+                                mSuperRecyclerViewImg.setAdapter(mAdapter);
+                            } else {
+                                if (!firstLoad)
+                                    mGirls.addAll(mGirls.size(), girls);
+
+                                mAdapter.setGirls(mGirls);
+                                mAdapter.notifyDataSetChanged();
+                            }
+
+                            mSuperRecyclerViewImg.hideMoreProgress();
+                            mSuperRecyclerViewImg.getSwipeToRefresh().setRefreshing(false);
+                        },
+                        err -> mProgressActivity.showError(null, "错误", err.toString(), "重试", v -> loadGirlData(mCategoryArray[0], Constant.API_COUNT, 1, true)));
+    }
+
+    private GankCategory createGirlDataWithgetFreeVideoDesc(GankCategory girls, GankCategory loves) {
+        for (int i = 0; i < girls.getResults().size(); i++) {
+            GankCategory.ResultsEntity girl = girls.getResults().get(i);
+            if (loves.getResults() != null && loves.getResults().size() > i)
+                girl.setDesc(girl.getDesc() + "  " + loves.getResults().get(i).getDesc());
+        }
+        return girls;
     }
 
     @Nullable
@@ -106,29 +127,34 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         return container;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
 
     @Override
-    public void onMoreAsked(int i, int i1, int i2) {
-
+    public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
+        if(isLoadMore){
+            loadGirlData(mCategoryArray[0], Constant.API_COUNT, numberOfItems / Constant.API_COUNT + 1, false);
+        }else {
+            mSuperRecyclerViewImg.hideMoreProgress();
+        }
     }
 
     @Override
     public void onRefresh() {
-
+        isLoadMore = true;
+        loadGirlData(mCategoryArray[0], Constant.API_COUNT, 1, true);
     }
 
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-        private List<GankCategory.ResultsEntity> resultsEntities;
 
-        public MyAdapter(List<GankCategory.ResultsEntity> resultsEntities) {
+        public void setGirls(List<GankCategory.ResultsEntity> girls) {
+            this.girls = girls;
+        }
+
+        private List<GankCategory.ResultsEntity> girls;
+
+        public MyAdapter(List<GankCategory.ResultsEntity> girls) {
             super();
-            this.resultsEntities = resultsEntities;
+            this.girls = girls;
         }
 
         @Override
@@ -140,32 +166,40 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mScreenWidth/2 - 1,300);
-            holder.mImageView.setLayoutParams(params);
-            Log.i(TAG,"W====>" + params.width + "  h=====>" + params.height);
+            GankCategory.ResultsEntity resultsEntity = girls.get(position);
+            //DO: Waiting for daimajia's new api...
+            holder.mGirlView.setOriginalSize(50, 50);
             Glide.with(getActivity())
-                    .load(resultsEntities.get(position).getUrl())
-                    .override(params.width, params.height)
+                    .load(resultsEntity.getUrl())
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(holder.mImageView);
+                    .into(holder.mGirlView);
+
+            holder.mTitle.setText(resultsEntity.getDesc());
         }
 
         @Override
         public int getItemCount() {
-            return resultsEntities.size();
+            return girls.size();
         }
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            ImageView mImageView;
+            RatioImageView mGirlView;
+            TextView mTitle;
 
             public MyViewHolder(View convertView) {
                 super(convertView);
-                mImageView = (ImageView) convertView.findViewById(R.id.welfare_img);
-
+                mGirlView = (RatioImageView) convertView.findViewById(R.id.welfare_img);
+                mTitle = (TextView) convertView.findViewById(R.id.welfare_title);
             }
         }
     }
 
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
 
 }

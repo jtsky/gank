@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 .add(mCategoryArray[6], MyFragment.class)
                 .create());
         mViewpager.setAdapter(adapter);
+        mViewpager.setOffscreenPageLimit(adapter.getCount());//设置ViewPager缓存个数
         mSmartTabLayout.setViewPager(mViewpager);
     }
 
