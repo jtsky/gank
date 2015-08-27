@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.jin.gank"
-        minSdkVersion 10
+        minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -54,13 +54,13 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     //图片加载框架
     compile 'com.github.bumptech.glide:glide:3.6.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     //一个高效的TabLayout库
     compile 'com.ogaclejapan.smarttablayout:library:1.3.0'
     //TabLayout帮助库
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.3.0@aar'
     //activity帮助类库
     compile 'com.vlonjatg.android:progress-activity:1.1.+'
-
     compile 'com.malinskiy:superrecyclerview:1.1.1'
     compile 'com.github.chrisbanes.photoview:library:1.2.3'
 

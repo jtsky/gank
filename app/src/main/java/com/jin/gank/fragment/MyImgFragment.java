@@ -1,7 +1,10 @@
 package com.jin.gank.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jin.gank.PictureActivity;
 import com.jin.gank.R;
 import com.jin.gank.animators.OvershootInLeftAnimator;
 import com.jin.gank.data.Constant;
@@ -47,6 +51,7 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private LayoutInflater mInflater;
     private MyAdapter mAdapter;
     private boolean isLoadMore = true;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,9 +135,9 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
-        if(isLoadMore){
+        if (isLoadMore) {
             loadGirlData(mCategoryArray[0], Constant.API_COUNT, numberOfItems / Constant.API_COUNT + 1, false);
-        }else {
+        } else {
             mSuperRecyclerViewImg.hideMoreProgress();
         }
     }
@@ -144,7 +149,7 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
 
-    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> implements View.OnClickListener {
 
         public void setGirls(List<GankCategory.ResultsEntity> girls) {
             this.girls = girls;
@@ -169,6 +174,8 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             GankCategory.ResultsEntity resultsEntity = girls.get(position);
             //DO: Waiting for daimajia's new api...
             holder.mGirlView.setOriginalSize(50, 50);
+            holder.mGirlView.setTag(R.id.image_tag, resultsEntity);
+            holder.mGirlView.setOnClickListener(this);
             Glide.with(getActivity())
                     .load(resultsEntity.getUrl())
                     .centerCrop()
@@ -183,6 +190,13 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             return girls.size();
         }
 
+        @Override
+        public void onClick(View v) {
+
+            startPictureActivity((GankCategory.ResultsEntity) v.getTag(R.id.image_tag),v);
+        }
+
+
         class MyViewHolder extends RecyclerView.ViewHolder {
             RatioImageView mGirlView;
             TextView mTitle;
@@ -193,6 +207,17 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 mTitle = (TextView) convertView.findViewById(R.id.welfare_title);
             }
         }
+
+        private void startPictureActivity(GankCategory.ResultsEntity girl,View sharedView) {
+            Intent i = new Intent(getActivity(), PictureActivity.class);
+            i.putExtra(PictureActivity.EXTRA_IMAGE_URL, girl.getUrl());
+            i.putExtra(PictureActivity.EXTRA_IMAGE_TITLE, girl.getDesc());
+
+            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), sharedView,
+                    PictureActivity.TRANSIT_PIC);
+            ActivityCompat.startActivity(getActivity(), i, optionsCompat.toBundle());
+        }
+
     }
 
 

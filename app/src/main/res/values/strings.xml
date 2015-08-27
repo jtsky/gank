@@ -2,4 +2,7 @@
     <string name="app_name">干货集锦</string>
 
     <string name="action_about">关于</string>
+    <string name="action_share">分享</string>
+    <string name="saving_picture">保存图片</string>
+    <string name="share_text">发现了一款非常美观的App「干货集锦」，每天一张精选妹纸图、一个精选小视频（视频源地址播放），一篇程序猿干货，完全开源不收费，太赞了! 参考了http://fir.im/mengmeizhi的项目 推荐~：https://github.com/jtsky/gank.git </string>
 </resources>

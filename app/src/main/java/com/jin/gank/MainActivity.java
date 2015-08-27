@@ -2,8 +2,6 @@ package com.jin.gank;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,30 +14,25 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private  String[] mCategoryArray = null;
-    @Bind(R.id.common_toolbar)
-    Toolbar mToolbar;
     @Bind(R.id.smartTabLayout)
     SmartTabLayout mSmartTabLayout;
     @Bind(R.id.viewpager)
     ViewPager mViewpager;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected int provideContentViewId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         mCategoryArray = getResources().getStringArray(R.array.category_list);
-        if (null != mToolbar) {
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setHomeButtonEnabled(false);//决定左上角的图标是否可以点击
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);//给左上角图标的左边加上一个返回的图标
-            mToolbar.setTitle(R.string.app_name);
-        }
-
-
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
                 .add(mCategoryArray[0], MyImgFragment.class)
@@ -71,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
 
 
 }
