@@ -48,7 +48,6 @@ public class PictureActivity extends BaseActivity {
         ViewCompat.setTransitionName(mImageView, TRANSIT_PIC);
         Glide.with(this).load(mImageUrl).into(mImageView);
 
-        // set up app bar
         setAppBar(0.7f);
         setTitle(mImageTitle);
 
