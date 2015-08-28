@@ -49,7 +49,7 @@ public class PictureActivity extends BaseActivity {
         Glide.with(this).load(mImageUrl).into(mImageView);
 
         // set up app bar
-        setAppBar(0.5f);
+        setAppBar(0.7f);
         setTitle(mImageTitle);
 
         setUpPhotoAttacher();

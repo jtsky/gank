@@ -3,6 +3,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/black">
 
+
     <ImageView
         android:id="@+id/picture"
         android:layout_centerInParent="true"
@@ -10,5 +11,4 @@
         android:layout_height="match_parent"/>
 
     <include layout="@layout/common_toolbar"/>
-
 </RelativeLayout>

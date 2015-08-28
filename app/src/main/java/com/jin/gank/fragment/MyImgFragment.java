@@ -47,7 +47,7 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
 
     private List<GankCategory.ResultsEntity> mGirls;
-    private String[] mCategoryArray = null;
+    private String[] mCategoryArray;
     private LayoutInflater mInflater;
     private MyAdapter mAdapter;
     private boolean isLoadMore = true;
@@ -83,27 +83,27 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         }
 
         Observable.zip(RetrofitHelp.getApi().listGankCategory(category, count, page)
-                , RetrofitHelp.getApi().listGankCategory(mCategoryArray[5], count, page), (girls, videos) ->
-                        createGirlDataWithgetFreeVideoDesc(girls, videos)
+                , RetrofitHelp.getApi().listGankCategory(mCategoryArray[5], count, page), (Girls, Videos) ->
+                        createGirlDataWithgetFreeVideoDesc(Girls, Videos)
         ).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(girls -> {
+                .flatMap(Girls -> {
                     //判断是否已经加载到最后一页
-                    if (girls.getResults().get(girls.getResults().size() - 1).getDesc().contains("5.19"))
+                    if (Girls.getResults().get(Girls.getResults().size() - 1).getDesc().contains("5.19"))
                         isLoadMore = false;
 
-                    return Observable.just(girls.getResults());
+                    return Observable.just(Girls.getResults());
                 })
-                .subscribe(girls -> {
+                .subscribe(Girls -> {
                             mProgressActivity.showContent();
 
                             if (mAdapter == null) {
-                                mGirls = girls;
+                                mGirls = Girls;
                                 mAdapter = new MyAdapter(mGirls);
                                 mSuperRecyclerViewImg.setAdapter(mAdapter);
                             } else {
                                 if (!firstLoad)
-                                    mGirls.addAll(mGirls.size(), girls);
+                                    mGirls.addAll(mGirls.size(), Girls);
 
                                 mAdapter.setGirls(mGirls);
                                 mAdapter.notifyDataSetChanged();
@@ -112,7 +112,7 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                             mSuperRecyclerViewImg.hideMoreProgress();
                             mSuperRecyclerViewImg.getSwipeToRefresh().setRefreshing(false);
                         },
-                        err -> mProgressActivity.showError(null, "错误", err.toString(), "重试", v -> loadGirlData(mCategoryArray[0], Constant.API_COUNT, 1, true)));
+                        err -> mProgressActivity.showError(null, "错误", err.toString(), "重试", v -> loadGirlData(category, Constant.API_COUNT, 1, true)));
     }
 
     private GankCategory createGirlDataWithgetFreeVideoDesc(GankCategory girls, GankCategory loves) {

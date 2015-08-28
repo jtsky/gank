@@ -19,6 +19,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     Toolbar mToolbar;
 
     protected boolean mIsHiddenToolBar = false;
+
     abstract protected int provideContentViewId();
 
     @Override
@@ -48,13 +49,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void hideOrShowToolbar() {
         mAppBarLayout.animate()
-                .translationY(mIsHiddenToolBar ? 0 : - mAppBarLayout.getHeight())
+                .translationY(mIsHiddenToolBar ? 0 : -mAppBarLayout.getHeight())
                 .setInterpolator(new DecelerateInterpolator(2))
                 .start();
 
         mIsHiddenToolBar = !mIsHiddenToolBar;
     }
-
 
 
 }

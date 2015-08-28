@@ -34,4 +34,22 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:layout_scrollFlags="scroll|enterAlways"
         />
+
+    <com.ogaclejapan.smarttablayout.SmartTabLayout
+        android:id="@+id/smartTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/theme_primary"
+        android:paddingBottom="3dp"
+        app:stl_indicatorInterpolation="smart"
+        app:stl_indicatorColor="@color/white"
+        app:stl_indicatorThickness="3dp"
+        app:stl_indicatorCornerRadius="2dp"
+        app:stl_dividerColor="@android:color/transparent"
+        app:stl_dividerThickness="0dp"
+        app:stl_underlineColor="@android:color/transparent"
+        app:stl_defaultTabTextColor="@android:color/white"
+        app:stl_defaultTabTextSize="16sp"
+        app:stl_defaultTabTextHorizontalPadding="20dp"
+        />
 </android.support.design.widget.AppBarLayout>

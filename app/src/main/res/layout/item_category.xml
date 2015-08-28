@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="2dp"
+    app:cardBackgroundColor="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginTop="4dp"
+    >
+    <!--app:cardElevation="8dp"-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin"
+        >
+
+        <TextView
+            android:id="@+id/category_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="作者： jin"
+            android:textSize="@dimen/text_size_14"/>
+
+        <TextView
+            android:id="@+id/category_publish_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="发布时间：2015-08-28T03:57:22.851Z"
+            android:textSize="@dimen/text_size_14"
+            android:layout_marginTop="@dimen/divider_margin"
+            />
+
+        <TextView
+            android:id="@+id/category_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="功能介绍：可展开，可拖动，可排序，可删除，固定更多的GridView"
+            android:textSize="@dimen/text_size_14"
+            android:layout_marginTop="@dimen/divider_margin"
+            />
+
+        <TextView
+            android:id="@+id/category_url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="链接：https://github.com/wedcel/DragExpandGrid"
+            android:textSize="@dimen/text_size_14"
+            android:layout_marginTop="@dimen/divider_margin"
+            android:autoLink="web"
+            />
+    </LinearLayout>
+</android.support.v7.widget.CardView>
