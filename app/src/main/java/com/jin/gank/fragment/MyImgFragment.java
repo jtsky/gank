@@ -12,10 +12,12 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.jin.gank.GankActivity;
 import com.jin.gank.PictureActivity;
 import com.jin.gank.R;
 import com.jin.gank.animators.OvershootInLeftAnimator;
@@ -89,7 +91,7 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(Girls -> {
                     //判断是否已经加载到最后一页
-                    if (Girls.getResults().get(Girls.getResults().size() - 1).getDesc().contains("5.19"))
+                    if (Girls.getResults().size() < 10)
                         isLoadMore = false;
 
                     return Observable.just(Girls.getResults());
@@ -176,6 +178,8 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             holder.mGirlView.setOriginalSize(50, 50);
             holder.mGirlView.setTag(R.id.image_tag, resultsEntity);
             holder.mGirlView.setOnClickListener(this);
+            holder.mDesc.setTag(R.id.image_tag, resultsEntity);
+            holder.mDesc.setOnClickListener(this);
             Glide.with(getActivity())
                     .load(resultsEntity.getUrl())
                     .centerCrop()
@@ -193,29 +197,39 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         @Override
         public void onClick(View v) {
 
-            startPictureActivity((GankCategory.ResultsEntity) v.getTag(R.id.image_tag),v);
+            startPictureActivity((GankCategory.ResultsEntity) v.getTag(R.id.image_tag), v);
         }
 
 
         class MyViewHolder extends RecyclerView.ViewHolder {
             RatioImageView mGirlView;
             TextView mTitle;
+            LinearLayout mDesc;
 
             public MyViewHolder(View convertView) {
                 super(convertView);
                 mGirlView = (RatioImageView) convertView.findViewById(R.id.welfare_img);
                 mTitle = (TextView) convertView.findViewById(R.id.welfare_title);
+                mDesc = (LinearLayout) convertView.findViewById(R.id.welfare_desc);
             }
         }
 
-        private void startPictureActivity(GankCategory.ResultsEntity girl,View sharedView) {
-            Intent i = new Intent(getActivity(), PictureActivity.class);
-            i.putExtra(PictureActivity.EXTRA_IMAGE_URL, girl.getUrl());
-            i.putExtra(PictureActivity.EXTRA_IMAGE_TITLE, girl.getDesc());
+        private void startPictureActivity(GankCategory.ResultsEntity girl, View sharedView) {
+            if (sharedView.getId() == R.id.welfare_img) {
+                Intent i = new Intent(getActivity(), PictureActivity.class);
+                i.putExtra(PictureActivity.EXTRA_IMAGE_URL, girl.getUrl());
+                i.putExtra(PictureActivity.EXTRA_IMAGE_TITLE, girl.getDesc());
 
-            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), sharedView,
-                    PictureActivity.TRANSIT_PIC);
-            ActivityCompat.startActivity(getActivity(), i, optionsCompat.toBundle());
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), sharedView,
+                        PictureActivity.TRANSIT_PIC);
+                ActivityCompat.startActivity(getActivity(), i, optionsCompat.toBundle());
+            } else {
+                Intent intent = new Intent(getActivity(), GankActivity.class);
+                String PublishedAt = girl.getPublishedAt().split("T")[0];
+                intent.putExtra(GankActivity.EXTRA_GANK_DATE, PublishedAt);
+                startActivity(intent);
+            }
+
         }
 
     }

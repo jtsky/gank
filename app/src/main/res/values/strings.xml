@@ -5,4 +5,9 @@
     <string name="action_share">分享</string>
     <string name="saving_picture">保存图片</string>
     <string name="share_text">发现了一款非常美观的App「干货集锦」，每天一张精选妹纸图、一个精选小视频（视频源地址播放），一篇程序猿干货，完全开源不收费，太赞了! 参考了http://fir.im/mengmeizhi的项目 推荐~：https://github.com/jtsky/gank.git </string>
+    <string name="url_gank_io">http://gank.io/</string>
+    <string name="tip_video_play">加载中...（这其实不是一个直接的视频播放器，而是个网页浏览器，需要你手动点击页面中的视频进行播放，另外，特别照顾魅族用户，可以按 下音量键 来返回竖屏页面）</string>
+    <string name="daimajia_has_gone">今日は肥皂家がない、干物の供給がない...</string>
+    <string name="action_subject">今日肥皂家话题</string>
+    <string name="share_from"><![CDATA[" - from「妹纸&gank.io」http://fir.im/mengmeizhi"]]></string>
 </resources>

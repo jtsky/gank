@@ -89,7 +89,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(Categorys -> {
                     //判断是否已经加载到最后一页
-                    if (Categorys.getResults().get(Categorys.getResults().size() - 1).getPublishedAt().contains("2015-05-18"))
+                    if (Categorys.getResults().size() < 10)
                         isLoadMore = false;
                     return Observable.just(Categorys.getResults());
                 })

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="image_tag" type="id"/>
+    <item name="AppBarLayout" type="id"/>
+    <item name="common_toolbar" type="id"/>
+
 </resources>

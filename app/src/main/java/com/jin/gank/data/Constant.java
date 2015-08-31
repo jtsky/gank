@@ -6,11 +6,9 @@ package com.jin.gank.data;
 public class Constant {
     public static final String ROOT_PATH = "http://gank.avosapps.com/api";
 
-
-
-
-
     public static final int API_COUNT = 10;
+
+    public static final int VIEWPAGE_COUNT = 5;
 
 
 }

@@ -27,6 +27,7 @@
             />
 
         <LinearLayout
+            android:id="@+id/welfare_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -35,7 +36,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp"
-
             >
 
             <TextView

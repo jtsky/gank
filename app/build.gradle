@@ -63,5 +63,6 @@ dependencies {
     compile 'com.vlonjatg.android:progress-activity:1.1.+'
     compile 'com.malinskiy:superrecyclerview:1.1.1'
     compile 'com.github.chrisbanes.photoview:library:1.2.3'
+    compile 'com.daimajia.numberprogressbar:library:1.2@aar'//进度条
 
 }
