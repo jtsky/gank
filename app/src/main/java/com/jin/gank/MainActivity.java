@@ -16,7 +16,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
-    private  String[] mCategoryArray = null;
     @Bind(R.id.smartTabLayout)
     SmartTabLayout mSmartTabLayout;
     @Bind(R.id.viewpager)
@@ -32,16 +31,15 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        mCategoryArray = getResources().getStringArray(R.array.category_list);
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
-                .add(mCategoryArray[0], MyImgFragment.class)
-                .add(mCategoryArray[1], MyFragment.class)
-                .add(mCategoryArray[2], MyFragment.class)
-                .add(mCategoryArray[3], MyFragment.class)
-                .add(mCategoryArray[4], MyFragment.class)
-                .add(mCategoryArray[5], MyFragment.class)
-                .add(mCategoryArray[6], MyFragment.class)
+                .add(getmCategoryArray()[0], MyImgFragment.class)
+                .add(getmCategoryArray()[1], MyFragment.class)
+                .add(getmCategoryArray()[2], MyFragment.class)
+                .add(getmCategoryArray()[3], MyFragment.class)
+                .add(getmCategoryArray()[4], MyFragment.class)
+                .add(getmCategoryArray()[5], MyFragment.class)
+                .add(getmCategoryArray()[6], MyFragment.class)
                 .create());
         mViewpager.setAdapter(adapter);
         mViewpager.setOffscreenPageLimit(adapter.getCount());//设置ViewPager缓存个数
@@ -58,13 +56,11 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_about) {
-
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
     }
-
 
 
 }

@@ -6,10 +6,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-/**
- * It's a lovely adult video view.
- * Created by drakeet on 8/14/15.
- */
+
 public class LoveVideoView extends WebView {
 
     public LoveVideoView(Context context) {

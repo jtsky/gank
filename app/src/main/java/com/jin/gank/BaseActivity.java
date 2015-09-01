@@ -13,6 +13,11 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2015/8/27.
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    public String[] getmCategoryArray() {
+        return mCategoryArray;
+    }
+
+    private String[] mCategoryArray;
     @Bind(R.id.AppBarLayout)
     AppBarLayout mAppBarLayout;
     @Bind(R.id.common_toolbar)
@@ -26,11 +31,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(provideContentViewId());
+        mCategoryArray = getResources().getStringArray(R.array.category_list);
         ButterKnife.bind(this);
         setToolBar();
     }
 
-    public void setToolBar() {
+    private void setToolBar() {
         if (null != mToolbar) {
             setSupportActionBar(mToolbar);
             getSupportActionBar().setHomeButtonEnabled(false);//决定左上角的图标是否可以点击

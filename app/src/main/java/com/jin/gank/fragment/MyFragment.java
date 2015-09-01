@@ -1,10 +1,7 @@
 package com.jin.gank.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.jin.gank.PictureActivity;
 import com.jin.gank.R;
 import com.jin.gank.animators.OvershootInLeftAnimator;
 import com.jin.gank.data.Constant;
@@ -62,6 +58,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         position = FragmentPagerItem.getPosition(getArguments());
+
         mSuperRecyclerViewCategory.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSuperRecyclerViewCategory.getRecyclerView().setItemAnimator(new OvershootInLeftAnimator());
         mSuperRecyclerViewCategory.setRefreshListener(this);
@@ -73,10 +70,9 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             mAdapter.notifyDataSetChanged();
         }
 
-
     }
 
-
+    //下载数据信息
     private void loadCategoryData(String category, int count, int page, boolean firstLoad) {
         if (firstLoad) {
             mProgressActivity.showLoading();
@@ -129,7 +125,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     }
 
 
-    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> implements View.OnClickListener {
+    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         public void setCategorys(List<GankCategory.ResultsEntity> Categorys) {
             this.Categorys = Categorys;
@@ -163,12 +159,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             return Categorys.size();
         }
 
-        @Override
-        public void onClick(View v) {
-
-            startPictureActivity((GankCategory.ResultsEntity) v.getTag(R.id.image_tag), v);
-        }
-
 
         class MyViewHolder extends RecyclerView.ViewHolder {
             TextView mAuthor, mPublishTime, mDesc, mUrl;
@@ -180,16 +170,6 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 mDesc = (TextView) convertView.findViewById(R.id.category_desc);
                 mUrl = (TextView) convertView.findViewById(R.id.category_url);
             }
-        }
-
-        private void startPictureActivity(GankCategory.ResultsEntity girl, View sharedView) {
-            Intent i = new Intent(getActivity(), PictureActivity.class);
-            i.putExtra(PictureActivity.EXTRA_IMAGE_URL, girl.getUrl());
-            i.putExtra(PictureActivity.EXTRA_IMAGE_TITLE, girl.getDesc());
-
-            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), sharedView,
-                    PictureActivity.TRANSIT_PIC);
-            ActivityCompat.startActivity(getActivity(), i, optionsCompat.toBundle());
         }
 
     }

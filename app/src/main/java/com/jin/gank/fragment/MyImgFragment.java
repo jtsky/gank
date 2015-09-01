@@ -62,6 +62,14 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        container = (ViewGroup) inflater.inflate(R.layout.fragment_img, null, false);
+        ButterKnife.bind(this, container);
+        return container;
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -77,13 +85,14 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         }
     }
 
+
+    //加载数据
     private void loadGirlData(String category, int count, int page, boolean firstLoad) {
         if (firstLoad) {
             mProgressActivity.showLoading();
             if (mGirls != null)
                 mGirls.clear();
         }
-
         Observable.zip(RetrofitHelp.getApi().listGankCategory(category, count, page)
                 , RetrofitHelp.getApi().listGankCategory(mCategoryArray[5], count, page), (Girls, Videos) ->
                         createGirlDataWithgetFreeVideoDesc(Girls, Videos)
@@ -126,13 +135,7 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         return girls;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        container = (ViewGroup) inflater.inflate(R.layout.fragment_img, null, false);
-        ButterKnife.bind(this, container);
-        return container;
-    }
+
 
 
     @Override
@@ -196,7 +199,6 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         @Override
         public void onClick(View v) {
-
             startPictureActivity((GankCategory.ResultsEntity) v.getTag(R.id.image_tag), v);
         }
 
@@ -216,13 +218,13 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         private void startPictureActivity(GankCategory.ResultsEntity girl, View sharedView) {
             if (sharedView.getId() == R.id.welfare_img) {
-                Intent i = new Intent(getActivity(), PictureActivity.class);
-                i.putExtra(PictureActivity.EXTRA_IMAGE_URL, girl.getUrl());
-                i.putExtra(PictureActivity.EXTRA_IMAGE_TITLE, girl.getDesc());
-
+                Intent intent = new Intent(getActivity(), PictureActivity.class);
+                intent.putExtra(PictureActivity.EXTRA_IMAGE_URL, girl.getUrl());
+                intent.putExtra(PictureActivity.EXTRA_IMAGE_TITLE, girl.getDesc());
+                //打开activity 动画
                 ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), sharedView,
                         PictureActivity.TRANSIT_PIC);
-                ActivityCompat.startActivity(getActivity(), i, optionsCompat.toBundle());
+                ActivityCompat.startActivity(getActivity(), intent, optionsCompat.toBundle());
             } else {
                 Intent intent = new Intent(getActivity(), GankActivity.class);
                 String PublishedAt = girl.getPublishedAt().split("T")[0];

@@ -10,9 +10,7 @@ import android.view.animation.AnimationUtils;
 import com.jin.gank.R;
 
 
-/**
- * Created by drakeet on 8/12/15.
- */
+
 public class AnimRecyclerViewAdapter<T extends RecyclerView.ViewHolder>
     extends RecyclerView.Adapter<T> {
 

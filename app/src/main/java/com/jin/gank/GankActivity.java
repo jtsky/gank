@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import butterknife.ButterKnife;
 
 
 public class GankActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
-
+    private static final String TAG = "GankActivity";
     public static final String EXTRA_GANK_DATE = "gank_date";
 
     @Bind(R.id.pager)
@@ -55,6 +56,7 @@ public class GankActivity extends BaseActivity implements ViewPager.OnPageChange
             e.printStackTrace();
         }
         setTitle(DateUtils.toDate(mGankDate));
+        setAppBar(1.0f);
         initViewPager();
         initTabLayout();
     }
@@ -62,7 +64,7 @@ public class GankActivity extends BaseActivity implements ViewPager.OnPageChange
     private void initViewPager() {
         mPagerAdapter = new GankPagerAdapter(getSupportFragmentManager(), mGankDate);
         mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.setOffscreenPageLimit(1);
+        mViewPager.setOffscreenPageLimit(5);//缓存ViewPager页面数
         mViewPager.addOnPageChangeListener(this);
     }
 
@@ -147,7 +149,6 @@ public class GankActivity extends BaseActivity implements ViewPager.OnPageChange
     }
 
     public class GankPagerAdapter extends FragmentPagerAdapter {
-
         Date mDate;
 
         public GankPagerAdapter(FragmentManager fm, Date date) {
@@ -159,6 +160,7 @@ public class GankActivity extends BaseActivity implements ViewPager.OnPageChange
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(mDate);
             calendar.add(Calendar.DATE, -position);
+            Log.i(TAG,"" + calendar.get(Calendar.DAY_OF_MONTH));
             return GankFragment.newInstance(calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
         }

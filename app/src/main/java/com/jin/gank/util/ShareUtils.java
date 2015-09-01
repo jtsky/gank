@@ -6,9 +6,7 @@ import android.content.Intent;
 import com.jin.gank.R;
 
 
-/**
- * Created by drakeet on 8/17/15.
- */
+
 public class ShareUtils {
 
     public static void share(Context context) {

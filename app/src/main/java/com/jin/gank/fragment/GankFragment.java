@@ -43,9 +43,7 @@ import butterknife.OnClick;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-/**
- * Created by drakeet on 8/11/15.
- */
+
 public class GankFragment extends Fragment {
 
     private final String TAG = "GankFragment";
@@ -55,8 +53,10 @@ public class GankFragment extends Fragment {
 
     @Bind(R.id.rv_gank)
     RecyclerView mRecyclerView;
-    @Bind(R.id.stub_empty_view) ViewStub mEmptyViewStub;
-    @Bind(R.id.stub_video_view) ViewStub mVideoViewStub;
+    @Bind(R.id.stub_empty_view)
+    ViewStub mEmptyViewStub;
+    @Bind(R.id.stub_video_view)
+    ViewStub mVideoViewStub;
     @Bind(R.id.iv_video)
     VideoImageView mVideoImageView;
     @Bind(R.id.header_appbar)
@@ -89,7 +89,8 @@ public class GankFragment extends Fragment {
     public GankFragment() {
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGankList = new ArrayList<>();
         mAdapter = new GankListAdapter(mGankList);
@@ -105,8 +106,9 @@ public class GankFragment extends Fragment {
         mDay = bundle.getInt(ARG_DAY);
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_gank, container, false);
         ButterKnife.bind(this, rootView);
         initRecyclerView();
@@ -114,7 +116,8 @@ public class GankFragment extends Fragment {
         return rootView;
     }
 
-    @Override public void onViewCreated(View view, Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (mGankList.size() == 0) getData();
         if (mVideoPreviewUrl != null) {
@@ -131,13 +134,16 @@ public class GankFragment extends Fragment {
     private void getData() {
         getAndParseVideoPreview();
         mSubscription = RetrofitHelp.getApi().listGankDay(mYear, mMonth, mDay)
-            .observeOn(AndroidSchedulers.mainThread())
-            .map(data -> data.getResults())
-            .map(this::addAllResults)
-            .subscribe(list -> {
-                if (list.isEmpty()) { showEmptyView(); }
-                else {mAdapter.notifyDataSetChanged();}
-            }, Throwable::printStackTrace);
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(data -> data.getResults())
+                .map(this::addAllResults)
+                .subscribe(list -> {
+                    if (list.isEmpty()) {
+                        showEmptyView();
+                    } else {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }, Throwable::printStackTrace);
     }
 
     private void getAndParseVideoPreview() {
@@ -145,24 +151,28 @@ public class GankFragment extends Fragment {
         String url = getString(R.string.url_gank_io) + String.format("%s/%s/%s", mYear, mMonth, mDay);
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {
-            @Override public void onFailure(Request request, IOException e) {
+            @Override
+            public void onFailure(Request request, IOException e) {
 
                 ToastUtils.showShort(e.getMessage());
             }
 
-            @Override public void onResponse(Response response) throws IOException {
+            @Override
+            public void onResponse(Response response) throws IOException {
                 String body = response.body().string();
                 mVideoPreviewUrl = LoveStringUtils.getVideoPreviewImageUrl(body);
                 if (mVideoPreviewUrl != null && mVideoImageView != null) {
                     mVideoImageView.post(() -> Glide.with(mVideoImageView.getContext())
-                        .load(mVideoPreviewUrl)
-                        .into(mVideoImageView));
+                            .load(mVideoPreviewUrl)
+                            .into(mVideoImageView));
                 }
             }
         });
     }
 
-    private void showEmptyView() {mEmptyViewStub.inflate();}
+    private void showEmptyView() {
+        mEmptyViewStub.inflate();
+    }
 
     private List<GankCategory.ResultsEntity> addAllResults(GankDay.ResultsEntity results) {
         if (results.getAndroid() != null) mGankList.addAll(results.getAndroid());
@@ -173,7 +183,8 @@ public class GankFragment extends Fragment {
         return mGankList;
     }
 
-    @OnClick(R.id.header_appbar) void onPlayVideo() {
+    @OnClick(R.id.header_appbar)
+    void onPlayVideo() {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
@@ -182,8 +193,7 @@ public class GankFragment extends Fragment {
             case Configuration.ORIENTATION_LANDSCAPE: {
                 if (mIsVideoViewInflated) {
                     mVideoViewStub.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     mVideoView = (LoveVideoView) mVideoViewStub.inflate();
                     mIsVideoViewInflated = true;
                     String tip = getString(R.string.tip_video_play);
@@ -208,7 +218,8 @@ public class GankFragment extends Fragment {
         ToastUtils.showShort(getString(R.string.daimajia_has_gone));
     }
 
-    @Override public void onConfigurationChanged(Configuration newConfig) {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
         setVideoViewPosition(newConfig);
         super.onConfigurationChanged(newConfig);
     }
@@ -219,7 +230,8 @@ public class GankFragment extends Fragment {
         }
     }*/
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_share:
@@ -227,8 +239,7 @@ public class GankFragment extends Fragment {
                     GankCategory.ResultsEntity gank = mGankList.get(0);
                     String shareText = gank.getDesc() + gank.getUrl() + getString(R.string.share_from);
                     ShareUtils.share(getActivity(), shareText);
-                }
-                else {
+                } else {
                     ShareUtils.share(getActivity());
                 }
                 return true;
@@ -248,22 +259,26 @@ public class GankFragment extends Fragment {
         startActivity(intent);
     }
 
-    @Override public void onResume() {
+    @Override
+    public void onResume() {
         super.onResume();
         if (mVideoView != null) mVideoView.resumeTimers();
     }
 
-    @Override public void onPause() {
+    @Override
+    public void onPause() {
         super.onPause();
         if (mVideoView != null) mVideoView.pauseTimers();
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         if (mSubscription != null) mSubscription.unsubscribe();
         if (mVideoView != null) mVideoView.destroy();

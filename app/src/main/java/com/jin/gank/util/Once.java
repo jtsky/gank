@@ -3,9 +3,7 @@ package com.jin.gank.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * Created by drakeet on 8/16/15.
- */
+
 public class Once {
 
     SharedPreferences mSharedPreferences;

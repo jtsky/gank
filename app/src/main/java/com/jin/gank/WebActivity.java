@@ -40,7 +40,7 @@ public class WebActivity extends BaseActivity {
         mContext = this;
         mUrl = getIntent().getStringExtra(EXTRA_URL);
         mTitle = getIntent().getStringExtra(EXTRA_TITLE);
-
+        setAppBar(1.0f);
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);

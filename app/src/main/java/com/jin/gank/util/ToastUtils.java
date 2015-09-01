@@ -5,9 +5,7 @@ import android.widget.Toast;
 
 import com.jin.gank.application.MyApplication;
 
-/**
- * Created by drakeet on 9/27/14.
- */
+
 public class ToastUtils {
 
     Context mContext;

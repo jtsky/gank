@@ -1,8 +1,6 @@
 package com.jin.gank.util;
 
-/**
- * Created by drakeet on 8/14/15.
- */
+
 public class LoveStringUtils {
 
     public static String getVideoPreviewImageUrl(String resp) {

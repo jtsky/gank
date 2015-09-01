@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.jin.gank.util.ImageUtils;
 import com.jin.gank.util.ShareUtils;
 
 import butterknife.Bind;
@@ -24,9 +25,6 @@ public class PictureActivity extends BaseActivity {
 
     PhotoViewAttacher mPhotoViewAttacher;
     String mImageUrl, mImageTitle;
-
-
-
 
     private void parseIntent() {
         mImageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
@@ -73,12 +71,11 @@ public class PictureActivity extends BaseActivity {
     }
 
     private void saveImageToGallery() {
-        //MeizhiImageUtils.saveImageToSdCard(this, mImageUrl, mImageTitle);
+        ImageUtils.saveImageToSdCard(this, mImageUrl, mImageTitle);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_picture, menu);
-        // TODO: 把图片的一些信息，比如 who，加载到 Overflow 当中
         return true;
     }
 
@@ -92,10 +89,6 @@ public class PictureActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
 
     @Override protected void onDestroy() {
         super.onDestroy();

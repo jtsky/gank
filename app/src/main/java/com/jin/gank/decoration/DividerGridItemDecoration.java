@@ -14,9 +14,7 @@ import android.view.View;
 import com.jin.gank.R;
 
 
-/**
- * @author zhy
- */
+
 public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
     public DividerGridItemDecoration(Context context) {

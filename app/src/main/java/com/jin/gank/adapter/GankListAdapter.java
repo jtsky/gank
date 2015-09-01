@@ -19,9 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by drakeet on 8/11/15.
- */
+
 public class GankListAdapter extends AnimRecyclerViewAdapter<GankListAdapter.ViewHolder> {
 
     private List<GankCategory.ResultsEntity> mGankList;
