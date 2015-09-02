@@ -7,22 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import com.jin.gank.data.Constant;
 import com.jin.gank.fragment.GankFragment;
-import com.jin.gank.util.DateUtils;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,39 +24,36 @@ import butterknife.ButterKnife;
 
 public class GankActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     private static final String TAG = "GankActivity";
-    public static final String EXTRA_GANK_DATE = "gank_date";
+    public static final String EXTRA_GANK_DATA = "gank_data";
 
     @Bind(R.id.pager)
     ViewPager mViewPager;
     @Bind(R.id.tabLayout)
     TabLayout mTabLayout;
-
     GankPagerAdapter mPagerAdapter;
-    Date mGankDate;
+    List<String> mDates;
 
-    @Override protected int provideContentViewId() {
+
+    @Override
+    protected int provideContentViewId() {
         return R.layout.activity_gank;
     }
 
 
-
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            mGankDate = fmt.parse(getIntent().getStringExtra(EXTRA_GANK_DATE));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        setTitle(DateUtils.toDate(mGankDate));
+        mDates = getIntent().getStringArrayListExtra(EXTRA_GANK_DATA);
+
+        setTitle(mDates.get(0));
         setAppBar(1.0f);
         initViewPager();
         initTabLayout();
     }
 
     private void initViewPager() {
-        mPagerAdapter = new GankPagerAdapter(getSupportFragmentManager(), mGankDate);
+        mPagerAdapter = new GankPagerAdapter(getSupportFragmentManager(), mDates);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(5);//缓存ViewPager页面数
         mViewPager.addOnPageChangeListener(this);
@@ -75,52 +66,46 @@ public class GankActivity extends BaseActivity implements ViewPager.OnPageChange
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-    @Override public void onConfigurationChanged(Configuration newConfig) {
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { hideOrShowToolbar(); }
-        else { hideOrShowToolbar(); }
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            hideOrShowToolbar();
+        } else {
+            hideOrShowToolbar();
+        }
     }
 
-    @Override protected void hideOrShowToolbar() {
+    @Override
+    protected void hideOrShowToolbar() {
         View toolbar = findViewById(R.id.toolbar_with_indicator);
         toolbar.animate()
-            .translationY(mIsHiddenToolBar ? 0 : -mToolbar.getHeight())
-            .setInterpolator(new DecelerateInterpolator(2))
-            .start();
+                .translationY(mIsHiddenToolBar ? 0 : -mToolbar.getHeight())
+                .setInterpolator(new DecelerateInterpolator(2))
+                .start();
         mIsHiddenToolBar = !mIsHiddenToolBar;
         if (mIsHiddenToolBar) {
             mViewPager.setTag(mViewPager.getPaddingTop());
             mViewPager.setPadding(0, 0, 0, 0);
-        }
-        else {
+        } else {
             mViewPager.setPadding(0, (int) mViewPager.getTag(), 0, 0);
             mViewPager.setTag(null);
         }
     }
 
-    @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-       /* switch (keyCode) {
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-            case KeyEvent.KEYCODE_BACK:
-                if (getResources().getConfiguration().orientation
-                    == Configuration.ORIENTATION_LANDSCAPE) {
-                    LoveBus.getLovelySeat().post(new OnKeyBackClickEvent());
-                    return true;
-                }
-        }*/
-        return super.onKeyDown(keyCode, event);
-    }
 
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_about:
-               // startActivity(new Intent(this, AboutActivity.class));
+                // startActivity(new Intent(this, AboutActivity.class));
                 return true;
 
         }
@@ -128,8 +113,8 @@ public class GankActivity extends BaseActivity implements ViewPager.OnPageChange
     }
 
 
-
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         mViewPager.removeOnPageChangeListener(this);
         super.onDestroy();
         ButterKnife.unbind(this);
@@ -140,33 +125,35 @@ public class GankActivity extends BaseActivity implements ViewPager.OnPageChange
 
     }
 
-    @Override public void onPageSelected(int position) {
-        setTitle(DateUtils.toDate(mGankDate, -position));
+    @Override
+    public void onPageSelected(int position) {
+        setTitle(mDates.get(position));
     }
 
-    @Override public void onPageScrollStateChanged(int state) {
+    @Override
+    public void onPageScrollStateChanged(int state) {
 
     }
 
     public class GankPagerAdapter extends FragmentPagerAdapter {
-        Date mDate;
+        List<String> mDates;
+        DateFormat dfm;
 
-        public GankPagerAdapter(FragmentManager fm, Date date) {
+        public GankPagerAdapter(FragmentManager fm, List<String> dates) {
             super(fm);
-            mDate = date;
+            mDates = dates;
+            dfm = new SimpleDateFormat("yyyy-MM-dd");
         }
 
-        @Override public Fragment getItem(int position) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(mDate);
-            calendar.add(Calendar.DATE, -position);
-            Log.i(TAG,"" + calendar.get(Calendar.DAY_OF_MONTH));
-            return GankFragment.newInstance(calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
+        @Override
+        public Fragment getItem(int position) {
+            String[] date = mDates.get(position).split("-");
+            return GankFragment.newInstance(Integer.parseInt(date[0]), Integer.parseInt(date[1]), Integer.parseInt(date[2]));
         }
 
-        @Override public int getCount() {
-            return Constant.VIEWPAGE_COUNT;
+        @Override
+        public int getCount() {
+            return mDates.size();
         }
     }
 }

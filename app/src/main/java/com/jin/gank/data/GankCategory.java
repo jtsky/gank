@@ -1,5 +1,6 @@
 package com.jin.gank.data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class GankCategory {
         return results;
     }
 
-    public static class ResultsEntity {
+    public static class ResultsEntity implements Serializable {
         /**
          * createdAt : 2015-08-24T03:53:33.486Z
          * publishedAt : 2015-08-24T04:06:07.602Z
@@ -123,5 +124,7 @@ public class GankCategory {
         public String getUpdatedAt() {
             return updatedAt;
         }
+
+
     }
 }

@@ -29,6 +29,7 @@ import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.vlonjatg.progressactivity.ProgressActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -136,8 +137,6 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
 
-
-
     @Override
     public void onMoreAsked(int numberOfItems, int numberBeforeMore, int currentItemPos) {
         if (isLoadMore) {
@@ -227,8 +226,22 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 ActivityCompat.startActivity(getActivity(), intent, optionsCompat.toBundle());
             } else {
                 Intent intent = new Intent(getActivity(), GankActivity.class);
-                String PublishedAt = girl.getPublishedAt().split("T")[0];
-                intent.putExtra(GankActivity.EXTRA_GANK_DATE, PublishedAt);
+                int position = mGirls.indexOf(girl);
+                List<String> dates = new ArrayList<>();
+                //判断是否超出最大list大小
+                if (position + 5 > mGirls.size()) {
+                    for (int i = position; i < mGirls.size(); i++) {
+                        String PublishedAt = mGirls.get(i).getPublishedAt().split("T")[0];
+                        dates.add(PublishedAt);
+                    }
+                } else {
+                    for (int i = position; i < position + 5; i++) {
+                        String PublishedAt = mGirls.get(i).getPublishedAt().split("T")[0];
+                        dates.add(PublishedAt);
+                    }
+                }
+                // String PublishedAt = girl.getPublishedAt().split("T")[0];
+                intent.putStringArrayListExtra(GankActivity.EXTRA_GANK_DATA, (ArrayList<String>) dates);
                 startActivity(intent);
             }
 

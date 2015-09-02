@@ -87,6 +87,7 @@ public class GankFragment extends Fragment {
     }
 
     public GankFragment() {
+
     }
 
     @Override
