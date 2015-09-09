@@ -97,7 +97,7 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         Observable.zip(RetrofitHelp.getApi().listGankCategory(category, count, page)
                 , RetrofitHelp.getApi().listGankCategory(mCategoryArray[5], count, page), (Girls, Videos) ->
                         createGirlDataWithgetFreeVideoDesc(Girls, Videos)
-        ).subscribeOn(Schedulers.newThread())
+        ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(Girls -> {
                     //判断是否已经加载到最后一页

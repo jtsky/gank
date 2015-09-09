@@ -81,7 +81,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         }
 
         RetrofitHelp.getApi().listGankCategory(category, count, page)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(Categorys -> {
                     //判断是否已经加载到最后一页

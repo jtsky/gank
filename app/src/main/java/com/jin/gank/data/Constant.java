@@ -4,7 +4,7 @@ package com.jin.gank.data;
  * Created by Administrator on 2015/8/21.
  */
 public class Constant {
-    public static final String ROOT_PATH = "http://gank.avosapps.com/api";
+    public static final String ROOT_PATH = "http://gank.avosapps.com/api/";
 
     public static final int API_COUNT = 10;
 

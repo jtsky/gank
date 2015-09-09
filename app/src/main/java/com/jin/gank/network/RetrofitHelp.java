@@ -5,8 +5,10 @@ import com.squareup.okhttp.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
 
-import retrofit.RestAdapter;
-import retrofit.client.OkClient;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
+
 
 /**
  * Created by Administrator on 2015/8/21.
@@ -19,10 +21,12 @@ public class RetrofitHelp {
             OkHttpClient client = new OkHttpClient();
             client.setReadTimeout(12, TimeUnit.SECONDS);
 
-            RestAdapter restAdapter = new RestAdapter.Builder().setClient(new OkClient(client))
-                    .setEndpoint(Constant.ROOT_PATH)
+            Retrofit retrofit = new Retrofit.Builder().client(client)
+                    .baseUrl(Constant.ROOT_PATH)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
-            api = restAdapter.create(RESTApi.class);
+            api = retrofit.create(RESTApi.class);
         }
 
         return api;
