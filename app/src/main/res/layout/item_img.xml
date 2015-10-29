@@ -1,51 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:cardCornerRadius="2dp"
-    app:cardBackgroundColor="@color/white"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp"
-    android:layout_marginTop="4dp"
     >
-    <!--app:cardElevation="8dp"-->
-    <LinearLayout
+    <data>
+        <variable name="girl"
+                  type="com.jin.gank.data.GankCategory.ResultsEntity"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        app:cardCornerRadius="2dp"
+        app:cardBackgroundColor="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="4dp"
         >
-
-        <com.jin.gank.view.RatioImageView
-            android:id="@+id/welfare_img"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            />
-
+        <!--app:cardElevation="8dp"-->
         <LinearLayout
-            android:id="@+id/welfare_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:orientation="vertical"
             >
 
-            <TextView
-                android:id="@+id/welfare_title"
-                android:layout_width="wrap_content"
+            <com.jin.gank.view.RatioImageView
+                android:id="@+id/welfare_img"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                tools:text="Title"/>
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{girl.url}"
+                />
+
+            <LinearLayout
+                android:id="@+id/welfare_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="10dp"
+
+                >
+
+                <TextView
+                    android:id="@+id/welfare_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    tools:text="Title"
+                    android:text="@{girl.desc}"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-    </LinearLayout>
+</layout>
 
-</android.support.v7.widget.CardView>

@@ -1,5 +1,6 @@
 package com.jin.gank.fragment;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,12 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.jin.gank.R;
 import com.jin.gank.animators.OvershootInLeftAnimator;
 import com.jin.gank.data.Constant;
 import com.jin.gank.data.GankCategory;
+import com.jin.gank.databinding.ItemCategoryBinding;
 import com.jin.gank.network.RetrofitHelp;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
@@ -148,10 +149,7 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
             GankCategory.ResultsEntity Category = Categorys.get(position);
-            holder.mAuthor.setText("作者： " + Category.getWho());
-            holder.mPublishTime.setText("发布日期： " + Category.getPublishedAt());
-            holder.mDesc.setText("功能描述： " + Category.getDesc());
-            holder.mUrl.setText("链接： " + Category.getUrl());
+            holder.bind(Category);
         }
 
         @Override
@@ -161,14 +159,16 @@ public class MyFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
 
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView mAuthor, mPublishTime, mDesc, mUrl;
+            private ItemCategoryBinding mCategoryBinding;
 
             public MyViewHolder(View convertView) {
                 super(convertView);
-                mAuthor = (TextView) convertView.findViewById(R.id.category_author);
-                mPublishTime = (TextView) convertView.findViewById(R.id.category_publish_time);
-                mDesc = (TextView) convertView.findViewById(R.id.category_desc);
-                mUrl = (TextView) convertView.findViewById(R.id.category_url);
+                mCategoryBinding = DataBindingUtil.bind(convertView);
+
+            }
+
+            public void bind(GankCategory.ResultsEntity Category) {
+                mCategoryBinding.setCategory(Category);
             }
         }
 

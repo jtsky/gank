@@ -1,6 +1,7 @@
 package com.jin.gank.fragment;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -12,19 +13,15 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.jin.gank.GankActivity;
 import com.jin.gank.PictureActivity;
 import com.jin.gank.R;
 import com.jin.gank.animators.OvershootInLeftAnimator;
 import com.jin.gank.data.Constant;
 import com.jin.gank.data.GankCategory;
+import com.jin.gank.databinding.ItemImgBinding;
 import com.jin.gank.network.RetrofitHelp;
-import com.jin.gank.view.RatioImageView;
 import com.malinskiy.superrecyclerview.OnMoreListener;
 import com.malinskiy.superrecyclerview.SuperRecyclerView;
 import com.vlonjatg.progressactivity.ProgressActivity;
@@ -175,20 +172,14 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
-            GankCategory.ResultsEntity resultsEntity = girls.get(position);
-            //DO: Waiting for daimajia's new api...
-            holder.mGirlView.setOriginalSize(50, 50);
-            holder.mGirlView.setTag(R.id.image_tag, resultsEntity);
-            holder.mGirlView.setOnClickListener(this);
-            holder.mDesc.setTag(R.id.image_tag, resultsEntity);
-            holder.mDesc.setOnClickListener(this);
-            Glide.with(getActivity())
-                    .load(resultsEntity.getUrl())
-                    .centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(holder.mGirlView);
+            GankCategory.ResultsEntity gril = girls.get(position);
+            holder.bind(gril);
+            holder.mImgBinding.welfareImg.setOriginalSize(50, 50);
+            holder.mImgBinding.welfareImg.setTag(R.id.image_tag, gril);
+            holder.mImgBinding.welfareImg.setOnClickListener(this);
+            holder.mImgBinding.welfareDesc.setTag(R.id.image_tag, gril);
+            holder.mImgBinding.welfareDesc.setOnClickListener(this);
 
-            holder.mTitle.setText(resultsEntity.getDesc());
         }
 
         @Override
@@ -203,15 +194,16 @@ public class MyImgFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
 
         class MyViewHolder extends RecyclerView.ViewHolder {
-            RatioImageView mGirlView;
-            TextView mTitle;
-            LinearLayout mDesc;
+            private ItemImgBinding mImgBinding;
 
             public MyViewHolder(View convertView) {
                 super(convertView);
-                mGirlView = (RatioImageView) convertView.findViewById(R.id.welfare_img);
-                mTitle = (TextView) convertView.findViewById(R.id.welfare_title);
-                mDesc = (LinearLayout) convertView.findViewById(R.id.welfare_desc);
+                mImgBinding = DataBindingUtil.bind(convertView);
+
+            }
+
+            public void bind(GankCategory.ResultsEntity Gril) {
+                mImgBinding.setGirl(Gril);
             }
         }
 

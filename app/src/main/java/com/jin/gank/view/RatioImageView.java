@@ -23,12 +23,11 @@ import android.widget.ImageView;
 /**
  * 一个能保持比例的 ImageView
  * TODO: 暂时只支持维持宽度适应高度
- *
  */
 public class RatioImageView extends ImageView {
 
-    private int originalWidth;
-    private int originalHeight;
+    private int originalWidth = 50;
+    private int originalHeight = 50;
 
     public RatioImageView(Context context) {
         super(context);
@@ -47,7 +46,9 @@ public class RatioImageView extends ImageView {
         this.originalHeight = originalHeight;
     }
 
-    @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (originalWidth > 0 && originalHeight > 0) {
             float ratio = (float) originalWidth / (float) originalHeight;
 
