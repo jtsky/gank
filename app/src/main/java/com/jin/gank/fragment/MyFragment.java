@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jin.gank.R;
-import com.jin.gank.animators.OvershootInLeftAnimator;
 import com.jin.gank.data.Constant;
 import com.jin.gank.data.GankCategory;
 import com.jin.gank.databinding.ItemCategoryBinding;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import jp.wasabeef.recyclerview.animators.OvershootInLeftAnimator;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

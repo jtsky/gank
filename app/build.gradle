@@ -1,18 +1,23 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'//lambda表达式插件
-apply plugin: 'jsonschema2pojo'
-apply plugin: 'com.android.databinding'
+//apply plugin: 'jsonschema2pojo'
+//apply plugin: 'com.android.databinding'
 android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.1'
 
     defaultConfig {
         applicationId "com.jin.gank"
         minSdkVersion 14
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
+
+    dataBinding {
+        enabled = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -41,9 +46,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:design:22.2.1'
-    compile 'com.android.support:cardview-v7:22.1.0'
-    compile 'com.android.support:appcompat-v7:22.1.0'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:cardview-v7:23.1.1'
     //网络访问框架
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta1'
     compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta1'
@@ -65,6 +69,7 @@ dependencies {
     //activity帮助类库
     compile 'com.vlonjatg.android:progress-activity:1.1.1'
     compile 'com.malinskiy:superrecyclerview:1.1.1'
+    compile 'jp.wasabeef:recyclerview-animators:2.0.1'
     compile 'com.commit451:PhotoView:1.2.4'
     //进度条
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
