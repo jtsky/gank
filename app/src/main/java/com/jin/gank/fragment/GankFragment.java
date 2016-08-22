@@ -22,7 +22,6 @@ import com.jin.gank.adapter.GankListAdapter;
 import com.jin.gank.data.GankCategory;
 import com.jin.gank.data.GankDay;
 import com.jin.gank.network.RetrofitHelp;
-import com.jin.gank.util.LoveStringUtils;
 import com.jin.gank.util.Once;
 import com.jin.gank.util.ShareUtils;
 import com.jin.gank.util.ToastUtils;
@@ -30,18 +29,12 @@ import com.jin.gank.view.GoodAppBarLayout;
 import com.jin.gank.view.LoveVideoView;
 import com.jin.gank.view.VideoImageView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -136,14 +129,11 @@ public class GankFragment extends Fragment {
     }
 
     private void getData() {
-        getAndParseVideoPreview();
+
         mSubscription = RetrofitHelp.getApi().listGankDay(mYear, mMonth, mDay)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(data -> {
-                    GankDay.ResultsEntity day = data.getResults();
-                    return day;
-                })
+                .map(data -> data.getResults())
                 .map(this::addAllResults)
                 .subscribe(list -> {
                     if (list.isEmpty()) {
@@ -154,10 +144,17 @@ public class GankFragment extends Fragment {
                 }, e -> {
                     Log.e(TAG, e.getMessage());
                 });
+        getAndParseVideoPreview();
+
     }
 
     private void getAndParseVideoPreview() {
-        OkHttpClient client = new OkHttpClient();
+        mVideoImageView.post(() -> Glide.with(mVideoImageView.getContext())
+                .load(mVideoPreviewUrl)
+                .into(mVideoImageView));
+
+
+        /*OkHttpClient client = new OkHttpClient();
         String url = getString(R.string.url_gank_io) + String.format("%s/%s/%s", mYear, mMonth, mDay);
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {
@@ -176,9 +173,7 @@ public class GankFragment extends Fragment {
                             .into(mVideoImageView));
                 }
             }
-
-
-        });
+        });*/
     }
 
     private void showEmptyView() {
@@ -186,6 +181,13 @@ public class GankFragment extends Fragment {
     }
 
     private List<GankCategory.ResultsEntity> addAllResults(GankDay.ResultsEntity results) {
+        //初始化视频图片
+        if (results.get福利() != null) {
+            mVideoImageView.post(() -> Glide.with(mVideoImageView.getContext())
+                    .load(results.get福利().get(0).getUrl())
+                    .into(mVideoImageView));
+        }
+
         if (results.getAndroid() != null) mGankList.addAll(results.getAndroid());
         if (results.getIOS() != null) mGankList.addAll(results.getIOS());
         if (results.get拓展资源() != null) mGankList.addAll(results.get拓展资源());
