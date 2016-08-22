@@ -1,13 +1,13 @@
 package com.jin.gank.network;
 
 import com.jin.gank.data.Constant;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -18,8 +18,12 @@ public class RetrofitHelp {
 
     public static RESTApi getApi() {
         if (api == null) {
-            OkHttpClient client = new OkHttpClient();
-            client.setReadTimeout(12, TimeUnit.SECONDS);
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(true)
+                    .build();
 
             Retrofit retrofit = new Retrofit.Builder().client(client)
                     .baseUrl(Constant.ROOT_PATH)

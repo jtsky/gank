@@ -4,8 +4,8 @@ import com.jin.gank.data.GankCategory;
 import com.jin.gank.data.GankDay;
 import com.jin.gank.data.GankRandom;
 
-import retrofit.http.GET;
-import retrofit.http.Path;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 import rx.Observable;
 
 /**

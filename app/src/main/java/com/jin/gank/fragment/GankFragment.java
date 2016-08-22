@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +29,6 @@ import com.jin.gank.util.ToastUtils;
 import com.jin.gank.view.GoodAppBarLayout;
 import com.jin.gank.view.LoveVideoView;
 import com.jin.gank.view.VideoImageView;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,8 +37,14 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class GankFragment extends Fragment {
@@ -135,8 +138,12 @@ public class GankFragment extends Fragment {
     private void getData() {
         getAndParseVideoPreview();
         mSubscription = RetrofitHelp.getApi().listGankDay(mYear, mMonth, mDay)
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(data -> data.getResults())
+                .map(data -> {
+                    GankDay.ResultsEntity day = data.getResults();
+                    return day;
+                })
                 .map(this::addAllResults)
                 .subscribe(list -> {
                     if (list.isEmpty()) {
@@ -144,7 +151,9 @@ public class GankFragment extends Fragment {
                     } else {
                         mAdapter.notifyDataSetChanged();
                     }
-                }, Throwable::printStackTrace);
+                }, e -> {
+                    Log.e(TAG, e.getMessage());
+                });
     }
 
     private void getAndParseVideoPreview() {
@@ -153,13 +162,12 @@ public class GankFragment extends Fragment {
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
-
+            public void onFailure(Call call, IOException e) {
                 ToastUtils.showShort(e.getMessage());
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(Call call, Response response) throws IOException {
                 String body = response.body().string();
                 mVideoPreviewUrl = LoveStringUtils.getVideoPreviewImageUrl(body);
                 if (mVideoPreviewUrl != null && mVideoImageView != null) {
@@ -168,6 +176,8 @@ public class GankFragment extends Fragment {
                             .into(mVideoImageView));
                 }
             }
+
+
         });
     }
 
